@@ -3,7 +3,7 @@
 ![Coverage Status](assets/coverage-badge.svg)
 
 <h1 align="center">
-nmross
+NMRoss
 </h1>
 
 <br>
