@@ -1577,7 +1577,32 @@ def get_smiles_from_input(input_string: str):
         except Exception as e:
             raise ValueError(f"An error occurred: {e}")
 
-
+def has_aromatic_ring(smiles: str) -> bool:
+    """
+    Checks if the given SMILES string contains a 6-carbon aromatic ring.
+    
+    Args:
+        smiles (str): The SMILES string of the molecule.
+        
+    Returns:
+        bool: True if there is a 6-carbon aromatic ring, False otherwise.
+    """
+    # Parse the SMILES string to create a molecule object
+    molecule = Chem.MolFromSmiles(smiles)
+    
+    # Ensure the molecule is valid
+    if molecule is None:
+        raise ValueError("Invalid SMILES string provided.")
+    
+    # Find all aromatic rings in the molecule
+    aromatic_rings = [ring for ring in Chem.GetSymmSSSR(molecule) if all(molecule.GetAtomWithIdx(idx).GetIsAromatic() for idx in ring)]
+    
+    # Check if any aromatic ring has exactly 6 carbon atoms
+    for ring in aromatic_rings:
+        if len(ring) == 6 and all(molecule.GetAtomWithIdx(idx).GetSymbol() == 'C' for idx in ring):
+            return True
+            
+    return False
 
 
 def NMR(name: str):
