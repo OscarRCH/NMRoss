@@ -62,15 +62,14 @@ jupyter lab
 ## 🔥 Usage
 
 ```python
-from mypackage import main_func
+from nmross.NMRoss import NMR
+from nmross.NMRoss import Show
 
-# One line to rule them all
-result = main_func(data)
+NMR("molecule name or smiles")
+Show("molecule name or smiles",atom index)
 ```
 
-This usage example shows how to quickly leverage the package's main functionality with just one line of code (or a few lines of code). 
-After importing the `main_func` (to be renamed by you), you simply pass in your `data` and get the `result` (this is just an example, your package might have other inputs and outputs). 
-Short and sweet, but the real power lies in the detailed documentation.
+You can quickly copy these lines to get a complete view of the package's functionalities. The `NMR` function generates an image of the NMR spectrum along with an image of the molecule to help visualise it. The `Show` does the exact same, however, it adds the option to select a carbon index in the molecule, that will be highlighted in red on the molecule image, aswell as highlight the peaks of the hydrogens on that carbon in the NMR spectrum.
 
 
 
