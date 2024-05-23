@@ -19,6 +19,7 @@ dependencies = [
 ]
 authors = [
     {name = "Cedric Rossboth", email = "cedric.rossboth@epfl.ch"}
+    {name = "Oscar Rosseneu", email = "oscar.rosseneu@epfl.ch"}
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
