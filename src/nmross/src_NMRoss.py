@@ -627,7 +627,7 @@ def search_algo(idx : int, smiles : str):
     List = []
     if len(mol.GetAtomWithIdx(idx).GetNeighbors()) >= 2: # or idx == 0:
         branches = clean_aromatics(idx, smiles) #Gets all the branches of the central atom.
-        
+
         for branch in branches:                     #Looks through all of them individually.
             #in the case of a aldehyde:
             if branch == 'C=O':
@@ -647,14 +647,15 @@ def search_algo(idx : int, smiles : str):
                     for resemblance in gsm:
                         dict = {}
                         for a in resemblance:
-                            dict[a] = map_dist[a]
-                            y_min = min(list(dict.values())) + 1
+                            if a in list(map_dist.keys()):
+                                dict[a] = map_dist[a]
+                                y_min = min(list(dict.values())) + 1
                             if not any(resemblance[a] in atoms_seen for a in range(0,len(resemblance))):
                                 atoms_seen.update(a for a in resemblance)
                                 dict_smiles_found[y_min].append(smiles_data)  
 
 
-                          
+
 
             Final_dict = {key: value for key, value in dict_smiles_found.items() if value != []}
             List.append(Final_dict)
@@ -665,36 +666,40 @@ def search_algo(idx : int, smiles : str):
             #in the case of formaldehyde:
             if branch == 'C=O':
                 return 0
+            print(branch)
             new_mol = Chem.MolFromSmiles(branch)
             dict_smiles_found = {}                  
-            map_dist = map(idx, smiles)    #Hold the distance from the central atom (which is zero because of the branches) to all other atoms.
-            del map_dist[idx]
+            map_dist = map(0, branch)    #Hold the distance from the central atom (which is zero because of the branches) to all other atoms.
+            del map_dist[0]
             for atom in range(0,max(list(map_dist.values()))+1):
                 dict_smiles_found[atom] = []        #It will hold every functional group and the distance from central atom. 
             #Every branch starts at index 0. 
-            atoms_seen = set([idx])
+            atoms_seen = set([0])
             #Looks through all functional groups and finds the shortest distance from the central atom.
             for smiles_data in list(sorted_data[from_mol_to_shift_figure(smiles)[idx]].keys()):  
                 mol_data = Chem.MolFromSmiles(smiles_data)
                 gsm = new_mol.GetSubstructMatches(mol_data)
                 if gsm != ():
+                    print(gsm)
+                    print(smiles_data)
+                    print(map_dist)
                     for resemblance in gsm:
                         dict = {}
                         for a in resemblance:
-                            if a != 0:
+                            if a in list(map_dist.keys()):
                                 dict[a] = map_dist[a]
                                 y_min = min(list(dict.values()))
                             else:
                                 pass
 
-                            if not any(resemblance[a] in atoms_seen for a in range(0,len(resemblance))):
-                                atoms_seen.update(a for a in resemblance)
-                                dict_smiles_found[y_min].append(smiles_data)                             
+                        if not any(resemblance[a] in atoms_seen for a in range(0,len(resemblance))):
+                            atoms_seen.update(a for a in resemblance)
+                            dict_smiles_found[y_min].append(smiles_data)                             
         else:
             return []
         Final_dict = {key: value for key, value in dict_smiles_found.items() if value != []}
         List.append(Final_dict)
-        
+
     return List
 
 
