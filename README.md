@@ -11,7 +11,7 @@ NMRoss
 
 Gives an approximate 1H NMR when given a smiles or a IUPAC name of a molecule with maximum one aromatic ring and no double bonds.
 
-## 🔧 Installation
+## `👷‍♂️:` Installation
 
 ## 1. Fork the Repository
 
@@ -58,8 +58,7 @@ jupyter lab
 ```
 
 
-
-## 🔥 Usage
+## `🧠:` Usage
 
 ```python
 from nmross.NMRoss import NMR
@@ -74,7 +73,7 @@ You can quickly copy these lines to get a complete view of the package's functio
 
 
 
-## 🛠️ Development installation
+## `💥:` Development installation
 
 Initialize Git (only for the first time). 
 
