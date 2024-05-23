@@ -32,14 +32,29 @@ Create a new virtual environment to keep your dependencies isolated: and activat
 conda create -n nmross python=3.10
 conda activate nmross
 ```
+## 4. Install dependencies via conda
 
-## 4. Install the Package Locally
+To avoid any build issues when installing some of the necessary packages for installation, it is easier to install them using conda.
+```
+conda install -c conda-forge numpy matplotlib rdkit
+```
+
+### Summary
+
+- **Install System Dependencies**: Ensure necessary system libraries are installed.
+- **Use Conda for Binary Packages**: Install `numpy`, `matplotlib`, and `rdkit` via `conda` to avoid build issues.
+- **Install Your Package**: Use `pip install .` after ensuring dependencies are met.
+
+By following these steps, you should be able to avoid the build issues with `numpy` and `matplotlib`, ensuring a smooth installation process for your package.
+
+
+## 5. Install the Package Locally
 
 With the virtual environment activated, install the package locally using 'pip install .': this installs the package that are in the current folder so make sure you are in the environment nmross.
 ```
 pip install .
 ```
-## 5. Install JupyterLab 
+## 6. Install JupyterLab 
 
 Install jupyter lab in the nmross environment. You can launch jupyter lab by copying the second line.
 
