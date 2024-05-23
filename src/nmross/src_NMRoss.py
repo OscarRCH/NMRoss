@@ -2,6 +2,7 @@ import pubchempy as pcp
 import rdkit
 from rdkit import Chem
 from rdkit.Chem import AllChem
+from rdkit.Chem import rdmolops
 from rdkit.Chem.Draw import IPythonConsole
 IPythonConsole.ipython_useSVG=True
 import numpy as np
