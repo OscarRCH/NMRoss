@@ -39,13 +39,7 @@ To avoid any build issues when installing some of the necessary packages for ins
 conda install -c conda-forge numpy matplotlib rdkit
 ```
 
-### Summary
 
-- **Install System Dependencies**: Ensure necessary system libraries are installed.
-- **Use Conda for Binary Packages**: Install `numpy`, `matplotlib`, and `rdkit` via `conda` to avoid build issues.
-- **Install Your Package**: Use `pip install .` after ensuring dependencies are met.
-
-By following these steps, you should be able to avoid the build issues with `numpy` and `matplotlib`, ensuring a smooth installation process for your package.
 
 
 ## 5. Install the Package Locally
