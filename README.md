@@ -72,24 +72,7 @@ This usage example shows how to quickly leverage the package's main functionalit
 After importing the `main_func` (to be renamed by you), you simply pass in your `data` and get the `result` (this is just an example, your package might have other inputs and outputs). 
 Short and sweet, but the real power lies in the detailed documentation.
 
-## 👩‍💻 Installation
 
-Create a new environment, you may also give the environment a different name. 
-
-```
-conda create -n nmross python=3.10 
-```
-
-```
-conda activate nmross
-(conda_env) $ pip install .
-```
-
-If you need jupyter lab, install it 
-
-```
-(nmross) $ pip install jupyterlab
-```
 
 
 ## 🛠️ Development installation
