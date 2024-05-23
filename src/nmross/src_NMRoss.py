@@ -1596,7 +1596,7 @@ def NMR(name: str):
     try:        
         # The SMILES of the molecule is acquired.
         crude_smiles = get_smiles_from_input(name)
-        
+
         # Rearrange the molecule SMILES.
         smiles = canonicalize_smiles(crude_smiles)
         # The IUPAC name is acquired to show it on the graph.
@@ -1604,7 +1604,7 @@ def NMR(name: str):
 
         # The SMILES is turned into a Mol object.
         mol = Chem.MolFromSmiles(smiles)
-        
+
         # The multiplicity of each hydrogen is calculated.
         mult, dict_Hs = multiplicity(smiles)
         dict_shift = {}
@@ -1633,20 +1633,20 @@ def NMR(name: str):
 
         # Spacing between the peaks.
         spacing = 0.06
-        
+
         # How wide should the peaks be calculated for (it is wise for it to be small as bigger values will
         # yield very similar results).
         spread = 0.5
-        
+
         # How wide the line should be.
         lw = 0.25
-        
+
         # How wide the peaks should be
         sigma = 0.005
-        
+
         x_lists = []
         y_lists = []
-        
+
         for atom in list(mult.keys()):
             r, h = info_from_multiplicity(mult[atom])
             # Considers each peak one after the other.
@@ -1660,7 +1660,7 @@ def NMR(name: str):
                 y_lists.append(y)
 
         summed_y = defaultdict(float)
-        
+
         for x_list, y_list in zip(x_lists, y_lists):
             for x, y in zip(x_list, y_list):
                 summed_y[x] += y
@@ -1675,7 +1675,7 @@ def NMR(name: str):
         else:
             ymax = 1
             xmax = 12
-        
+
         # Plot the summed data
         plt.plot(summed_x, summed_y_values, linewidth=lw, color='black')
 
@@ -1685,7 +1685,7 @@ def NMR(name: str):
         else:
             plt.xlim(12, 0)
         plt.ylim(0, ymax + 0.1 * ymax)
-        
+
         # Draws the molecule considered so it is easy to know if the getsmilesfromsame function messed up or not.
         # It is also handy so as to use the function Show(int) where it will turn red the peak which corresponds
         # to the atom chosen.
@@ -1693,7 +1693,68 @@ def NMR(name: str):
         return plt, mol
     except Exception as e:
         raise Exception(f"An error occurred: {e}")
-Plt, mol = NMR('CC(=O)O')
+
+
+def Show(name : str, z : int):
+    """
+    Display the NMR spectrum of a molecule with a highlighted peak for the specified hydrogen index.
+
+    Parameters:
+    name (str): The name or SMILES representation of the molecule.
+    z (int): The index of the hydrogen atom to highlight in the spectrum.
+
+    Returns:
+    tuple: A tuple containing the matplotlib.pyplot object and RDKit Mol object with the highlighted atom.
+
+    Raises:
+    ValueError: If the specified index `z` does not correspond to a hydrogen atom.
+    """
+    # Generate the general NMR plot using the Plot function.
+    plt, mol = NMR(name)
+
+   # The SMILES of the molecule is acquired.
+    crude_smiles = get_smiles_from_input(name)
+    # Rearrange the molecule SMILES.
+    smiles = canonicalize_smiles(crude_smiles)
+    # The SMILES is turned into a Mol object.
+    mol = Chem.MolFromSmiles(smiles)
+    mult, dict_Hs = multiplicity(smiles)
+    dict_shift = {}
+
+    for atom in mol.GetAtoms():
+        if atom.GetIdx() in list(dict_Hs.keys()) and not atom.GetIsAromatic():
+                idx = atom.GetIdx()
+                idx_shift = shift(idx, smiles)
+                dict_shift[idx] = idx_shift
+    if has_aromatic_ring(smiles):
+        dict_shift_aromatics = main_aromatic(smiles)
+        dict_shift.update(dict_shift_aromatics)
+
+    if z not in dict_shift.keys():
+        raise ValueError(f'The index {z} does not have a hydrogen')
+
+    # Highlight the specified peak.
+    spacing = 0.06
+    spread = 0.5
+    lw = 0.25
+    sigma = 0.005
+
+    ymax = 0
+    for i in list(dict_shift.keys()):
+        if i == z:
+            r, h = info_from_multiplicity(mult[i])
+            for j in range(0, len(r)):
+                x_basis = np.arange(dict_shift[i] + r[j] * spacing - spread, dict_shift[i] + r[j] * spacing + spread, 0.0005)
+                y = norm(x_basis, 1, dict_shift[i] + r[j] * spacing, sigma) * h[j] * dict_Hs[i]
+                plt.plot(x_basis, y, color='r', linewidth=lw)
+
+    # Redraw the molecule with highlighted atom indices.
+    Zs = get_keys_from_value(dict_shift, dict_shift[z])
+    mol.__sssAtoms = [z for z in Zs]
+
+    # Show the plot
+    plt.show()
+    return plt, mol
 
 
 
