@@ -9,7 +9,7 @@ requires-python = ">=3.10"
 license = {file = "LICENSE"}
 description = "Gives an approximate 1H NMR when given a smiles or a IUPAC name of a molecule with maximum one aromatic ring and no double bonds."
 dependencies = [
-    "rdkit==2023.9.6",  # Update to a version that is available
+    "rdkit==2023.9.6",  
     "pubchempy==1.0.4",
     "numpy==1.21.0",
     "matplotlib==3.4.2" 
