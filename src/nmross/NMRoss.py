@@ -667,7 +667,6 @@ def search_algo(idx : int, smiles : str):
             #in the case of formaldehyde:
             if branch == 'C=O':
                 return 0
-            print(branch)
             new_mol = Chem.MolFromSmiles(branch)
             dict_smiles_found = {}                  
             map_dist = map(0, branch)    #Hold the distance from the central atom (which is zero because of the branches) to all other atoms.
@@ -681,9 +680,6 @@ def search_algo(idx : int, smiles : str):
                 mol_data = Chem.MolFromSmiles(smiles_data)
                 gsm = new_mol.GetSubstructMatches(mol_data)
                 if gsm != ():
-                    print(gsm)
-                    print(smiles_data)
-                    print(map_dist)
                     for resemblance in gsm:
                         dict = {}
                         for a in resemblance:
