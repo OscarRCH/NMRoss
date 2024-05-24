@@ -74,18 +74,21 @@ from nmross.NMRoss import NMR
 NMR('CCO')
 ```
 
-One who would like to know which peak is the one of the terminal carbon would use the package like this:
+One who would like to know which peak is the one of the terminal carbon would use the package like this. First:
 
 ```python
 from nmross.NMRoss import NMR
 from nmross.NMRoss import Show
 plt, mol = NMR('CCO')
 mol
+```
+
+The second line serves to identify how the program gives the indices to the atoms in the molecule. One of these indices can then be used during the following step. In this case, the terminal carbon is the one that is meant to be identified. Thus, the next steps are:
+```python
 plt, mol = Show('CCO', 0)
 mol
 ```
-
-In the second exemple, the second step was to identify how the program gives the indices to the atoms in the molecule. One of these indices could then be used during the fourth step. This step was to confirm that the terminal carbon was shown and that it was non equivalent to other hydrogens in the molecule.
+This shows that the primary carbon has hydrogens which are non equivalent to other hydrogens in the molecule.
 
 
 Click to add a cell.
