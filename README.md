@@ -60,15 +60,35 @@ jupyter lab
 
 ## `🧠:` Usage
 
+
+The two main functions of this module are NMR(name : str) and Show(name : str, index : int).
+
+The function NMR takes as an input either the IUPAC name of the compound or the smiles representation of it. This function outputs a plot of the NMR of the molecule and the Mol object of the molecule. The plot appears automatically when using NMR(name), but if needed there is a Mol object that allows to see which atom on the molecule has which index.
+
+The function Show takes as inputs either the IUPAC name of the compound or the smiles representation of it and an index in the molecule. The function outputs a plot of the 1H NMR of the molecule with the peak of the atom chosen hihlighted and a Mol object with all equivalent hydrogens highlighted. The function only ever plots a NMR spectrum if the atom with the index chosen has at least one hydrogen. The plot appears automatically when using the Show() method but the Mol object needs to be stocked in a variable to be shown.
+
+One who only ever wants to know the 1H NMR of ethanol would use the package like this:
+
+```python
+from nmross.NMRoss import NMR
+NMR('CCO')
+```
+
+One who would like to know which peak is the one of the terminal carbon would use the package like this:
+
 ```python
 from nmross.NMRoss import NMR
 from nmross.NMRoss import Show
-
-NMR("molecule name or smiles")
-Show("molecule name or smiles",atom index)
+plt, mol = NMR('CCO')
+mol
+plt, mol = Show('CCO', 0)
+mol
 ```
 
-You can quickly copy these lines to get a complete view of the package's functionalities. The `NMR` function generates an image of the NMR spectrum along with an image of the molecule to help visualise it. The `Show` does the exact same, however, it adds the option to select a carbon index in the molecule, that will be highlighted in red on the molecule image, aswell as highlight the peaks of the hydrogens on that carbon in the NMR spectrum.
+In the second exemple, the second step was to identify how the program gives the indices to the atoms in the molecule. One of these indices could then be used during the fourth step. This step was to confirm that the terminal carbon was shown and that it was non equivalent to other hydrogens in the molecule.
+
+
+Click to add a cell.
 
 
 
