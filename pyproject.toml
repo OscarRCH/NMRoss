@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "nmross"
@@ -9,7 +9,7 @@ requires-python = ">=3.10"
 license = {file = "LICENSE"}
 description = "Gives an approximate 1H NMR when given a smiles or a IUPAC name of a molecule with maximum one aromatic ring and no double bonds."
 dependencies = [ 
-    "pubchempy==1.0.4",
+    "pubchempy==1.0.4","numpy","rdkit","matplotlib"
 ]
 authors = [
     {name = "Cedric Rossboth", email = "cedric.rossboth@epfl.ch"}
@@ -26,6 +26,9 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
+
+keywords = ['NMR']
+
 dynamic = ["version"]
 
 [project.urls]
