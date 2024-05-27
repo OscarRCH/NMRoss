@@ -628,20 +628,20 @@ def search_algo(idx : int, smiles : str):
     List = []
     if len(mol.GetAtomWithIdx(idx).GetNeighbors()) >= 2: # or idx == 0:
         branches = clean_aromatics(idx, smiles) #Gets all the branches of the central atom.
-
+        
         for branch in branches:                     #Looks through all of them individually.
             #in the case of a aldehyde:
             if branch == 'C=O':
                 continue
-            new_mol = Chem.MolFromSmiles(branch[1:])
-            dict_smiles_found ={}                  
-            map_dist = map(0, smiles)    #Hold the distance from the central atom (which is zero because of the branches) to all other atoms.
+            new_mol = Chem.MolFromSmiles(branch)
+            dict_smiles_found = {}                  
+            map_dist = map(0, branch)    #Hold the distance from the central atom (which is zero because of the branches) to all other atoms.
             for atom in range(0,max(list(map_dist.values()))+1):
                 dict_smiles_found[atom] = []        #It will hold every functional group and the distance from central atom. 
             #Every branch starts at index 0. 
-            atoms_seen = set()
+            atoms_seen = set([0])
             #Looks through all functional groups and finds the shortest distance from the central atom.
-            for smiles_data in list(sorted_data[from_mol_to_shift_figure(smiles)[idx]].keys()):  
+            for smiles_data in list(sorted_data[1].keys()):  
                 mol_data = Chem.MolFromSmiles(smiles_data)
                 gsm = new_mol.GetSubstructMatches(mol_data)
                 if gsm!=():
@@ -650,14 +650,14 @@ def search_algo(idx : int, smiles : str):
                         for a in resemblance:
                             if a in list(map_dist.keys()):
                                 dict[a] = map_dist[a]
-                                y_min = min(list(dict.values())) + 1
-                            if not any(resemblance[a] in atoms_seen for a in range(0,len(resemblance))):
-                                atoms_seen.update(a for a in resemblance)
-                                dict_smiles_found[y_min].append(smiles_data)  
+                                y_min = min(list(dict.values()))
+                        if not any(resemblance[a] in atoms_seen for a in range(0,len(resemblance))):
+                            atoms_seen.update(a for a in resemblance)
+                            dict_smiles_found[y_min].append(smiles_data)  
 
 
-
-
+                          
+            del dict_smiles_found[0]
             Final_dict = {key: value for key, value in dict_smiles_found.items() if value != []}
             List.append(Final_dict)
     else:
@@ -694,9 +694,10 @@ def search_algo(idx : int, smiles : str):
                             dict_smiles_found[y_min].append(smiles_data)                             
         else:
             return []
+        del dict_smiles_found[0]
         Final_dict = {key: value for key, value in dict_smiles_found.items() if value != []}
         List.append(Final_dict)
-
+        
     return List
 
 
