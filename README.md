@@ -71,7 +71,8 @@ One who only ever wants to know the 1H NMR of ethanol would use the package like
 
 ```python
 from nmross.NMRoss import NMR
-NMR('CCO')
+plt, mol = NMR('CCO')
+mol
 ```
 
 One who would like to know which peak is the one of the terminal carbon would use the package like this. First:
