@@ -11,7 +11,27 @@ NMRoss
 
 Gives an approximate 1H NMR when given a smiles or a IUPAC name of a molecule with maximum one aromatic ring and no double bonds.
 
-## `👷‍♂️:` Installation
+## `🧑‍🔧:` Installation 
+Here are the steps to direclty install the nmross package using pip install.
+
+## 1. Create a Virtual Environment 
+
+We advise you to create an environment where you want to work on the project. Then activate the environment:
+```
+conda create -n nmross python=3.10
+conda activate nmross
+```
+## 2. Install Package
+```
+pip install nmross
+```
+## 3. Install JupyterLab
+```
+pip install jupyter lab
+jupyter lab
+```
+
+## `👷‍♂️:` Local installation 
 
 ## 1. Fork the Repository
 
