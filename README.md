@@ -84,7 +84,7 @@ plt, mol = NMR('CCO')
 mol
 ```
 
-The second line serves to identify how the program gives the indices to the atoms in the molecule. One of these indices can then be used during the following step. In this case, the terminal carbon is the one that is meant to be identified. Thus, the next steps are:
+The `mol` serves to identify how the program gives the indices to the atoms in the molecule. One of these indices can then be used during the following step. In this case, the terminal carbon is the one that is meant to be identified. Thus, the next steps are:
 ```python
 plt, mol = Show('CCO', 0)
 mol
