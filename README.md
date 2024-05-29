@@ -11,7 +11,27 @@ NMRoss
 
 Gives an approximate 1H NMR when given a smiles or a IUPAC name of a molecule with maximum one aromatic ring and no double bonds.
 
-## `👷‍♂️:` Installation
+## `🧑‍🔧:` Installation 
+Here are the steps to direclty install the nmross package using pip install.
+
+## 1. Create a Virtual Environment 
+
+We advise you to create an environment where you want to work on the project. Then activate the environment:
+```
+conda create -n nmross python=3.10
+conda activate nmross
+```
+## 2. Install Package
+```
+pip install nmross
+```
+## 3. Install JupyterLab
+```
+pip install jupyter lab
+jupyter lab
+```
+
+## `👷‍♂️:` Local installation 
 
 ## 1. Fork the Repository
 
@@ -84,7 +104,7 @@ plt, mol = NMR('CCO')
 mol
 ```
 
-The second line serves to identify how the program gives the indices to the atoms in the molecule. One of these indices can then be used during the following step. In this case, the terminal carbon is the one that is meant to be identified. Thus, the next steps are:
+The 'mol' code line serves to identify how the program gives the indices to the atoms in the molecule. One of these indices can then be used during the following step. In this case, the terminal carbon is the one that is meant to be identified. Thus, the next steps are:
 ```python
 plt, mol = Show('CCO', 0)
 mol
@@ -92,41 +112,11 @@ mol
 This shows that the primary carbon has hydrogens which are non equivalent to other hydrogens in the molecule.
 
 
-Click to add a cell.
 
 
 
 
-## `💥:` Development installation
 
-Initialize Git (only for the first time). 
-
-Note: You should have create an empty repository on `https://github.com:CedricRossboth/nmross`.
-
-```
-git init
-git add * 
-git add .*
-git commit -m "Initial commit" 
-git branch -M main
-git remote add origin git@github.com:CedricRossboth/nmross.git 
-git push -u origin main
-```
-
-Then add and commit changes as usual. 
-
-To install the package, run
-
-```
-(nmross) $ pip install -e ".[test,doc]"
-```
-
-### Run tests and coverage
-
-```
-(conda_env) $ pip install tox
-(conda_env) $ tox
-```
 
 
 
