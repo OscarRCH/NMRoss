@@ -1119,8 +1119,7 @@ def search_fctgrps_substituents(target_smiles, smiles_dict):
 
 def search_multiple_aromatics(substituents, smiles_dict):
     """
-    Searches for multiple aromatic substituents in the provided smiles_dict.
-    Appends results to a list of lists 'results' based on the structure of 'substituents'.
+    Searches for the functional groups in smiles_dict in the substituents list of list, works for the case of multiple aromatic rings.
 
     Parameters:
     substituents (list of list of str): List of lists containing SMILES strings or 'H'.
