@@ -1621,7 +1621,10 @@ def NMR(name: str):
         # Rearrange the molecule SMILES.
         smiles = canonicalize_smiles(crude_smiles)
         # The IUPAC name is acquired to show it on the graph.
-        chemical_name = get_name_from_smiles(smiles)
+        if is_valid_smiles(name):
+            chemical_name = get_name_from_smiles(smiles)
+        else:
+            chemical_name = name
 
         # The SMILES is turned into a Mol object.
         mol = Chem.MolFromSmiles(smiles)
