@@ -92,7 +92,7 @@ mol
 This shows that the primary carbon has hydrogens which are non equivalent to other hydrogens in the molecule.
 
 
-Click to add a cell.
+
 
 
 
