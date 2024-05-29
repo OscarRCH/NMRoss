@@ -1,4 +1,5 @@
-from nmross.NMRoss import get_smiles
+import pytest
+from nmross.NMRoss import *
 
 def test_get_smiles_butanol():
     expected_smiles = 'CCCCO'  # Known SMILES for butanol
