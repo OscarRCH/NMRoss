@@ -190,7 +190,7 @@ if __name__ == "__main__":
 
 
 def test_shift_1_butyric_acid():
-    smiles = 'CCCC(=O)'
+    smiles = 'CCCC(=O)O'
     result = shift_1(0, smiles)
     expected = 0.835
     assert abs(result - expected) < 1e-3, f"Expected {expected}, but got {result}"
@@ -271,11 +271,11 @@ if __name__ == "__main__":
 
 
 
-def test_valid_smiles():
-    assert find_aromatic_carbon_indexes("c1ccccc1") == [[0, 2, 3, 4, 5, 6]]
+def test_find_aromatic_carbon_indexes_benzene():
+    assert find_aromatic_carbon_indexes("c1ccccc1") == [0, 2, 3, 4, 5, 6]
 
-def test_valid_smiles_with_substituent():
-    assert find_aromatic_carbon_indexes("c1ccccc1C") == [[0, 2, 3, 4, 5, 6]]
+def test_find_aromatic_carbon_indexes_toluene():
+    assert find_aromatic_carbon_indexes("c1ccccc1C") == [0, 2, 3, 4, 5, 6]
 
 def test_invalid_smiles():
     try:
@@ -302,8 +302,8 @@ def test_empty_string():
         assert False, "Expected ValueError"
 
 if __name__ == "__main__":
-    test_valid_smiles()
-    test_valid_smiles_with_substituent()
+    test_find_aromatic_carbon_indexes_benzene()
+    test_find_aromatic_carbon_indexes_toluene()
     test_invalid_smiles()
     test_non_string_input()
     test_empty_string()
