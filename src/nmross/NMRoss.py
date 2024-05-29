@@ -45,6 +45,60 @@ def canonicalize_smiles(smiles : str):
 
 
 
+def multiplicity(smiles : str):
+    """
+    Calculates the multiplicity of hydrogen atoms for each carbon atom in a given molecule.
+
+    This function takes a SMILES string representing a molecule, parses it into an RDKit molecule,
+    and calculates the multiplicity of hydrogen atoms for each carbon atom that has hydrogens. 
+    It also includes other heavy atoms with hydrogens that are not carbon.
+
+    The multiplicity of a carbon atom is defined as the total number of hydrogen atoms on adjacent
+    carbon atoms with hydrogens.
+
+    Parameters:
+    smiles (str): A valid SMILES string representing the molecule.
+
+    Returns:
+    dict_mult_Heavy (dict): A dictionary where keys are the indices of carbon atoms with hydrogens,
+                            and values are the multiplicity of hydrogen atoms on adjacent carbon atoms.
+    F_dict_Hs (dict): A dictionary where keys are the indices of atoms with hydrogens,
+                      and values are the number of hydrogen atoms bonded to those atoms.
+
+    Raises:
+    ValueError: If the input SMILES string is invalid.
+
+    Example:
+    >>> multiplicity('CCO')
+    ({0: 2, 1: 3, 2: 0}, {0: 3, 1: 2, 2: 1})
+    """
+    mol = Chem.MolFromSmiles(smiles)
+    if not mol:
+        raise ValueError("Invalid SMILES string")
+    
+    # Dictionary of hydrogens bonded to each atom
+    dict_Hs = {atom.GetIdx(): atom.GetTotalNumHs(includeNeighbors=True) for atom in mol.GetAtoms()}
+    F_dict_Hs = {idx: count for idx, count in dict_Hs.items() if count != 0}
+    
+    dict_mult_Heavy = {atom.GetIdx(): 0 for atom in mol.GetAtoms() if atom.GetSymbol() == 'C' and dict_Hs[atom.GetIdx()] != 0}
+    
+    # Calculate multiplicity for carbons with hydrogens next to carbons with hydrogens
+    for bond in mol.GetBonds():
+        begin_idx, end_idx = bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()
+        if begin_idx in dict_mult_Heavy and end_idx in dict_mult_Heavy:
+            dict_mult_Heavy[begin_idx] += dict_Hs[end_idx]
+            dict_mult_Heavy[end_idx] += dict_Hs[begin_idx]
+    
+    # Include heavy atoms with hydrogens that are not carbon
+    for atom in mol.GetAtoms():
+        idx = atom.GetIdx()
+        if dict_Hs[idx] != 0 and idx not in dict_mult_Heavy:
+            dict_mult_Heavy[idx] = 0
+    
+    return dict_mult_Heavy, F_dict_Hs
+
+
+
 def from_mol_to_shift_figure(smiles):
     """
     Generate a dictionary representing the type of carbon atoms in a molecule.
@@ -63,8 +117,8 @@ def from_mol_to_shift_figure(smiles):
     mol = Chem.MolFromSmiles(smiles)
     
     atom_symbols = {atom.GetIdx(): atom.GetSymbol() for atom in mol.GetAtoms()}
-    dict_Hs = {atom.GetIdx(): atom.GetTotalNumHs(includeNeighbors=True) for atom in mol.GetAtoms()}
-    hydrogens_dict =  {idx: count for idx, count in dict_Hs.items() if count != 0}
+    multiplicities, hydrogens_dict = multiplicity(smiles)
+    
     aromatic_carbons = {}
     double_bonded_carbons = {}
     
@@ -529,7 +583,7 @@ def shift_0(idx, smiles: str):
     symbol = atom.GetSymbol()
 
     # Check if the atom has at least one hydrogen bonded to it
-    dict_Hs = {atom.GetIdx(): atom.GetTotalNumHs(includeNeighbors=True) for atom in mol.GetAtoms()}
+    dict_Hs = multiplicity(smiles)[1]
 
     if idx not in dict_Hs.keys():
         return f'An error occurred, atom with symbol: {symbol} does not have a bonded hydrogen'
@@ -1545,74 +1599,6 @@ def has_aromatic_ring(smiles: str) -> bool:
             return True
             
     return False
-
-
-
-def multiplicity(smiles : str):
-    """
-    Calculates the multiplicity of hydrogen atoms for each carbon atom in a given molecule.
-
-    This function takes a SMILES string representing a molecule, parses it into an RDKit molecule,
-    and calculates the multiplicity of hydrogen atoms for each carbon atom that has hydrogens. 
-    It also includes other heavy atoms with hydrogens that are not carbon.
-
-    The multiplicity of a carbon atom is defined as the total number of hydrogen atoms on adjacent
-    carbon atoms with hydrogens.
-
-    Parameters:
-    smiles (str): A valid SMILES string representing the molecule.
-
-    Returns:
-    dict_mult_Heavy (dict): A dictionary where keys are the indices of carbon atoms with hydrogens,
-                            and values are the multiplicity of hydrogen atoms on adjacent carbon atoms.
-    F_dict_Hs (dict): A dictionary where keys are the indices of atoms with hydrogens,
-                      and values are the number of hydrogen atoms bonded to those atoms.
-
-    Raises:
-    ValueError: If the input SMILES string is invalid.
-
-    Example:
-    >>> multiplicity('CCO')
-    ({0: 2, 1: 3, 2: 0}, {0: 3, 1: 2, 2: 1})
-    """
-    mol = Chem.MolFromSmiles(smiles)
-    if not mol:
-        raise ValueError("Invalid SMILES string")
-    
-    # Dictionary of hydrogens bonded to each atom
-    dict_Hs = {atom.GetIdx(): atom.GetTotalNumHs(includeNeighbors=True) for atom in mol.GetAtoms()}
-    F_dict_Hs = {idx: count for idx, count in dict_Hs.items() if count != 0}
-
-    dict_shift = {}
-    for atom in mol.GetAtoms():
-        if atom.GetIdx() in list(dict_Hs.keys()) and not atom.GetIsAromatic():
-            idx = atom.GetIdx()
-            idx_shift = shift(idx, smiles)
-            dict_shift[idx] = idx_shift
-    if has_aromatic_ring(smiles):
-        dict_shift_aromatics = main_aromatic(smiles)
-        dict_shift.update(dict_shift_aromatics)
-    
-    dict_mult_Heavy = {atom.GetIdx(): 0 for atom in mol.GetAtoms() if atom.GetSymbol() == 'C' and dict_Hs[atom.GetIdx()] != 0}
-    
-    # Calculate multiplicity for carbons with hydrogens next to carbons with hydrogens
-    for bond in mol.GetBonds():
-        begin_idx, end_idx = bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()
-        if begin_idx in dict_mult_Heavy and end_idx in dict_mult_Heavy:
-            if dict_shift[begin_idx] == dict_shift[end_idx]:
-                pass
-            else:
-                dict_mult_Heavy[begin_idx] += dict_Hs[end_idx]
-                dict_mult_Heavy[end_idx] += dict_Hs[begin_idx]
-    
-    # Include heavy atoms with hydrogens that are not carbon
-    for atom in mol.GetAtoms():
-        idx = atom.GetIdx()
-        if dict_Hs[idx] != 0 and idx not in dict_mult_Heavy:
-            dict_mult_Heavy[idx] = 0
-    
-    return dict_mult_Heavy, F_dict_Hs
-
 
 
 def NMR(name: str):
